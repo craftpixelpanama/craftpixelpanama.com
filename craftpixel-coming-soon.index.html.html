@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craft & Pixel — Panamá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sage:    #8B9F99;
+    --mint:    #97BFB2;
+    --silver:  #BFBFBF;
+    --ink:     #2c3330;
+    --ink-mid: #4a5c57;
+    --bg:      #f5f7f6;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  .bg-blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+
+  .blob-1 { width: 700px; height: 700px; background: #c4dad4; top: -260px; right: -200px; opacity: 0.55; animation-duration: 26s; }
+  .blob-2 { width: 500px; height: 500px; background: #b5cec8; bottom: -160px; left: -130px; opacity: 0.4; animation-duration: 20s; animation-delay: -9s; }
+  .blob-3 { width: 320px; height: 320px; background: #d6dcdb; top: 45%; left: 38%; opacity: 0.3; animation-duration: 30s; animation-delay: -14s; }
+
+  @keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(25px, 35px) scale(1.04); }
+  }
+
+  /* Geometric decoration — right side */
+  .deco {
+    position: fixed;
+    right: 0; top: 0;
+    width: 44vw; height: 100vh;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards 0.8s;
+  }
+
+  /* Page layout */
+  .page {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+  }
+
+  .header {
+    padding: 3rem 4.5rem 0;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.2s;
+  }
+
+  .logo-mark { display: inline-flex; align-items: stretch; }
+
+  .logo-block {
+    padding: 0.5rem 1.05rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-family: 'Aptos', 'Inter', sans-serif;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .logo-block.craft { background: #BFBFBF; }
+  .logo-block.amp   { background: #8B9F99; }
+  .logo-block.pixel { background: #97BFB2; }
+  .logo-sep { width: 2px; background: var(--bg); }
+
+  /* Hero */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 4.5rem 2rem;
+    max-width: 800px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 2.2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.45s;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 2rem; height: 1px;
+    background: var(--sage);
+    flex-shrink: 0;
+  }
+
+  .headline {
+    font-family: 'Aptos', 'Inter', sans-serif;
+    font-size: clamp(3.2rem, 7.5vw, 6.2rem);
+    font-weight: 700;
+    line-height: 0.93;
+    letter-spacing: -0.04em;
+    margin-bottom: 2.2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.65s;
+  }
+
+  .hl-dark  { display: block; color: var(--ink); }
+  .hl-mint  { display: block; color: var(--mint); }
+  .hl-sage  { display: block; color: var(--sage); }
+
+  .body-text {
+    font-size: 1rem;
+    line-height: 1.72;
+    color: var(--ink-mid);
+    max-width: 430px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 0.85s;
+    font-weight: 300;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    max-width: 430px;
+    margin-bottom: 2.8rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1s;
+  }
+
+  .div-l { width: 44px; height: 1px; background: var(--silver); flex-shrink: 0; }
+  .div-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--mint);
+    margin: 0 10px; flex-shrink: 0;
+    animation: pulse 2.8s ease-in-out infinite;
+  }
+  .div-r { flex: 1; height: 1px; background: linear-gradient(90deg, var(--silver), transparent); }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(0.6); opacity: 0.35; }
+  }
+
+  /* Contact */
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.2rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1.1s;
+  }
+
+  .c-item { display: flex; flex-direction: column; gap: 0.18rem; }
+
+  .c-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--silver);
+    font-weight: 400;
+  }
+
+  .c-value {
+    font-size: 0.88rem;
+    color: var(--ink);
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .c-value:hover { color: var(--mint); }
+
+  .ig-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.95rem;
+    border: 1px solid rgba(139,159,153,0.4);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: var(--sage);
+    text-decoration: none;
+    transition: all 0.22s ease;
+    font-weight: 400;
+    background: rgba(151,191,178,0.07);
+  }
+
+  .ig-pill:hover {
+    background: rgba(151,191,178,0.16);
+    border-color: var(--mint);
+    color: var(--ink);
+  }
+
+  .ig-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Marquee */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid rgba(139,159,153,0.2);
+    padding: 0.88rem 0;
+    background: rgba(245,247,246,0.6);
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1.5s;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 42s linear infinite;
+  }
+
+  .marquee-track:hover { animation-play-state: paused; }
+
+  .m-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0 2rem;
+    font-size: 0.67rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sage);
+    white-space: nowrap;
+    font-weight: 400;
+  }
+
+  .m-item::after {
+    content: '';
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--mint);
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Footer */
+  .footer {
+    padding: 1.5rem 4.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(139,159,153,0.14);
+    background: rgba(245,247,246,0.5);
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeUp 0.9s ease forwards 1.3s;
+  }
+
+  .f-location {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .f-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--mint);
+    animation: pulse 3.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .f-copy {
+    font-size: 0.68rem;
+    color: var(--silver);
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 768px) {
+    .header { padding: 2rem 1.6rem 0; }
+    .hero   { padding: 2.5rem 1.6rem 2rem; }
+    .footer { padding: 1.4rem 1.6rem; }
+    .deco   { display: none; }
+    .headline { font-size: clamp(2.6rem, 12vw, 4rem); }
+    .contact-row { gap: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- Minimalist geometric decoration -->
+<svg class="deco" viewBox="0 0 500 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <!-- Concentric circles centred right-side -->
+  <circle cx="360" cy="440" r="280" stroke="#8B9F99" stroke-width="0.7" opacity="0.18"/>
+  <circle cx="360" cy="440" r="190" stroke="#97BFB2" stroke-width="0.6" opacity="0.22"/>
+  <circle cx="360" cy="440" r="110" stroke="#BFBFBF" stroke-width="0.55" opacity="0.26"/>
+  <circle cx="360" cy="440" r="44"  stroke="#97BFB2" stroke-width="0.5" opacity="0.3"/>
+  <circle cx="360" cy="440" r="4"   fill="#97BFB2"   opacity="0.45"/>
+
+  <!-- Cross hairs — very faint -->
+  <line x1="70"  y1="440" x2="650" y2="440" stroke="#8B9F99" stroke-width="0.45" opacity="0.15"/>
+  <line x1="360" y1="140" x2="360" y2="740" stroke="#8B9F99" stroke-width="0.45" opacity="0.15"/>
+
+  <!-- Small accent circle top-right -->
+  <circle cx="438" cy="168" r="42" stroke="#97BFB2" stroke-width="0.6" opacity="0.28"/>
+  <circle cx="438" cy="168" r="5"  fill="#97BFB2"   opacity="0.3"/>
+
+  <!-- Small accent circle bottom-left -->
+  <circle cx="158" cy="700" r="26" stroke="#BFBFBF" stroke-width="0.5" opacity="0.25"/>
+
+  <!-- Tick marks -->
+  <line x1="218" y1="318" x2="248" y2="318" stroke="#8B9F99" stroke-width="0.55" opacity="0.22" stroke-linecap="round"/>
+  <line x1="218" y1="562" x2="248" y2="562" stroke="#8B9F99" stroke-width="0.55" opacity="0.22" stroke-linecap="round"/>
+
+  <!-- Arc fragment — top -->
+  <path d="M 120 220 A 260 260 0 0 1 340 140" stroke="#97BFB2" stroke-width="0.6" opacity="0.2" stroke-linecap="round"/>
+  <!-- Arc fragment — bottom -->
+  <path d="M 340 740 A 260 260 0 0 1 120 660" stroke="#8B9F99" stroke-width="0.55" opacity="0.18" stroke-linecap="round"/>
+</svg>
+
+<div class="page">
+
+  <header class="header">
+    <div class="logo-mark">
+      <div class="logo-block craft">Craft</div>
+      <div class="logo-sep"></div>
+      <div class="logo-block amp">&amp;</div>
+      <div class="logo-sep"></div>
+      <div class="logo-block pixel">Pixel</div>
+    </div>
+  </header>
+
+  <main class="hero">
+
+    <p class="eyebrow">Algo grande se está construyendo</p>
+
+    <h1 class="headline">
+      <span class="hl-dark">Estamos</span>
+      <span class="hl-mint">diseñando</span>
+      <span class="hl-sage">tu próxima</span>
+      <span class="hl-dark">historia.</span>
+    </h1>
+
+    <p class="body-text">
+      Detrás de cada gran marca hay una idea audaz y un equipo que sabe cómo hacerla brillar.
+      Pronto abriremos las puertas — donde el oficio se encuentra con la creatividad.
+    </p>
+
+    <div class="divider">
+      <div class="div-l"></div>
+      <div class="div-dot"></div>
+      <div class="div-r"></div>
+    </div>
+
+    <div class="contact-row">
+
+      <div class="c-item">
+        <span class="c-label">Correo</span>
+        <a href="mailto:info@craftpixelpanama.com" class="c-value">info@craftpixelpanama.com</a>
+      </div>
+
+      <div class="c-item">
+        <span class="c-label">Teléfonos</span>
+        <a href="tel:+5073824212" class="c-value">382-4212 · 908-2698</a>
+      </div>
+
+      <div class="c-item">
+        <span class="c-label">Síguenos</span>
+        <a href="https://instagram.com/craftpixelpanama" target="_blank" rel="noopener" class="ig-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/>
+          </svg>
+          @craftpixelpanama
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Services marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <footer class="footer">
+    <span class="f-location">
+      <span class="f-dot"></span>
+      Provincia de Coclé &amp; Panamá
+    </span>
+    <span class="f-copy">© 2025 Craft &amp; Pixel · Todos los derechos reservados</span>
+  </footer>
+
+</div>
+
+<script>
+  const services = [
+    'Publicidad', 'Diseño Gráfico', 'Branding', 'Rotulación',
+    'Impresión', 'Artículos Promocionales', 'Identidad Visual',
+    'Estrategia Digital', 'Fotografía Publicitaria', 'Diseño de Packaging',
+    'Material P.O.P.', 'Señalética', 'Diseño de Stands',
+    'Contenido de Marca', 'Vallas Publicitarias', 'Diseño Editorial',
+    'Uniformes Corporativos', 'Campañas Creativas', 'Redes Sociales'
+  ];
+
+  const track = document.getElementById('marqueeTrack');
+  [...services, ...services].forEach(s => {
+    const el = document.createElement('span');
+    el.className = 'm-item';
+    el.textContent = s;
+    track.appendChild(el);
+  });
+</script>
+
+</body>
+</html>
